@@ -75,6 +75,14 @@ function bloklariGetir() {
               <span class="title-row">${blok.ad}</span>
             </div>
             <div class="right">
+              <!-- Düzenle Butonu -->
+              <button class="icon-btn" onclick="blokDuzenle('${doc.id}', '${blok.ad}')" title="Düzenle">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--navy)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                </svg>
+              </button>
+              <!-- Sil Butonu -->
               <button class="icon-btn" onclick="blokSil('${doc.id}')" title="Sil">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
@@ -101,6 +109,25 @@ window.blokSil = async (id) => {
     } catch (error) {
       console.error("Silme hatası:", error);
       showToast("Silinemedi!");
+    }
+  }
+};
+
+// 4. Blok Düzenleme Fonksiyonu
+window.blokDuzenle = async (id, mevcutAd) => {
+  // Kullanıcıya mevcut adı gösterip yeni adı girmesini istiyoruz
+  const yeniAd = prompt("Yeni blok adını girin:", mevcutAd);
+  
+  // Eğer kullanıcı İptal'e basmadıysa, boş bırakmadıysa ve isim gerçekten değiştiyse kaydet
+  if (yeniAd !== null && yeniAd.trim() !== "" && yeniAd.trim() !== mevcutAd) {
+    try {
+      await db.collection('bloklar').doc(id).update({
+        ad: yeniAd.trim()
+      });
+      showToast("Blok adı güncellendi.");
+    } catch (error) {
+      console.error("Güncelleme hatası:", error);
+      showToast("Hata: Güncellenemedi!");
     }
   }
 };
