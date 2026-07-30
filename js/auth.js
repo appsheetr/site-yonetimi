@@ -70,11 +70,12 @@ loginBtn.addEventListener('click', async () => {
       const userCredential = await auth.signInWithEmailAndPassword(email, password);
       const user = userCredential.user;
 
-      if (!user.emailVerified) {
-        loginError.textContent = 'Lütfen önce e-posta adresinizi doğrulayın.';
-        auth.signOut();
-        return;
-      }
+      // GEÇİCİ OLARAK KAPATTIĞIMIZ KISIM:
+      // if (!user.emailVerified) {
+      //   loginError.textContent = 'Lütfen önce e-posta adresinizi doğrulayın.';
+      //   auth.signOut();
+      //   return;
+      // }
 
       // Kullanıcının veritabanındaki durumunu kontrol et
       const userDoc = await db.collection('users').doc(user.uid).get();
