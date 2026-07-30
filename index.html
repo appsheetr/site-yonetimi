@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<title>Site Yönetimi</title>
+<meta name="theme-color" content="#1A233A">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Site Yönetim">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@700;800&family=IBM+Plex+Mono:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ================= GİRİŞ / KAYIT ================= -->
+  <div id="loginScreen">
+    <div class="brand">
+      <img src="icons/icon-192.png" alt="Site Yönetimi logo">
+      <h1>Site Yönetimi</h1>
+      <p>Bloklar · Daireler · Sakinler · Ödemeler</p>
+    </div>
+
+    <form id="loginForm">
+      <div class="field hidden" id="nameField">
+        <label for="loginName">Ad Soyad</label>
+        <input id="loginName" type="text" placeholder="Ad Soyad" autocomplete="name">
+      </div>
+      <div class="field">
+        <label for="loginEmail">E-posta</label>
+        <input id="loginEmail" type="email" autocomplete="username" placeholder="ornek@site.com" required>
+      </div>
+      <div class="field">
+        <label for="loginPassword">Şifre</label>
+        <input id="loginPassword" type="password" autocomplete="current-password" placeholder="••••••••" required minlength="6">
+      </div>
+      <p class="error-msg" id="loginError"></p>
+      <button type="button" id="loginBtn" class="btn btn-primary btn-block">Giriş yap</button>
+      <button type="button" class="linklike" id="showRegister">Henüz hesabın yok mu? Hesap oluştur</button>
+    </form>
+  </div>
+
+  <!-- ================= ONAY BEKLİYOR EKRANI ================= -->
+  <div id="waitingScreen" class="hidden">
+    <div class="waiting-screen">
+      <div class="icon-circle">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#C9A227" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <h2>Hesabın oluşturuldu</h2>
+      <p>Yöneticinin seni bir daireye atayıp yetkilerini belirlemesini bekliyorsun. Bu genelde kısa sürer.</p>
+      <button class="btn btn-outline" id="waitingLogoutBtn">Çıkış yap</button>
+    </div>
+  </div>
+
+  <!-- ================= ANA UYGULAMA ================= -->
+  <div id="mainScreen" class="hidden">
+    <div class="topbar">
+      <div class="topbar-row">
+        <div class="topbar-left">
+          <button class="icon-btn-light" id="menuBtn" aria-label="Menü">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <div>
+            <h2 id="topbarTitle">Özet</h2>
+            <span class="role-badge" id="roleBadge">—</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <main>
+      <section id="view-ozet" class="view">
+        <div class="card">
+          <p style="margin:0 0 6px;font-weight:700;color:var(--navy)" id="welcomeText">Hoş geldin</p>
+          <p style="margin:0;color:var(--text-muted);font-size:13.5px">Bu ekran Faz 5'te aylık tahsilat/masraf özetiyle dolacak. Şimdilik sadece giriş ve menü yapısını kuruyoruz.</p>
+        </div>
+      </section>
+
+      <section id="view-generic" class="view hidden">
+        <div class="card placeholder-card">
+          <span class="soon-pill" id="genericSoonPill">Yakında</span>
+          <h3 id="genericTitle">Modül adı</h3>
+          <p id="genericDesc">Bu modülü ilerleyen fazlarda birlikte kuracağız.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ================= KENAR MENÜ ================= -->
+  <div class="drawer-overlay" id="drawerOverlay"></div>
+  <nav class="drawer" id="drawer">
+    <div class="drawer-header">
+      <div class="who" id="drawerWho">—</div>
+      <div class="mail" id="drawerMail">—</div>
+    </div>
+    <div class="drawer-menu" id="drawerMenu"></div>
+    <div class="drawer-footer">
+      <button class="btn btn-outline btn-block" id="logoutBtn">Çıkış yap</button>
+    </div>
+  </nav>
+
+  <div class="toast" id="toast"></div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/nav.js"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js').catch(err => console.warn('SW kaydı başarısız', err));
+    });
+  }
+</script>
+</body>
+</html>
